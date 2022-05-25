@@ -1,4 +1,3 @@
-
 def cityprint():
     for arr in cities:
         for wt in arr:
@@ -28,32 +27,35 @@ for curr in range (n):
     visited = []
     cost = 0
     visited.append(curr)
+    ind = curr
     while(len(visited) < n):
         shortest_route = 999
         shortest_route_index = -999
         for i in range(n):
             if i not in visited:
-                if cities[curr][i] < shortest_route:
-                    shortest_route = cities[curr][i]
-                    cost = cost + shortest_route
+                if cities[ind][i] > 0 and cities[ind][i] < shortest_route:
+                    shortest_route = cities[ind][i]
                     shortest_route_index = i
-        curr = shortest_route_index
-        visited.append(curr)
+        ind = shortest_route_index
+        if shortest_route_index == -999:
+            break
+        cost = cost + shortest_route
+        visited.append(ind)
 
-    if cities[curr][visited[0]] <= cost:
-        visited.append(visited[0])
-        cost = cost + cities[curr][visited[0]]
+    if ind == -999 or cities[ind][visited[0]] < 0:
+        continue
     else:
-        for i in range(len(visited)-2,-1,-1):
-            visited.append(visited[i])
-            cost = 2*cost
+        visited.append(visited[0])
+        cost = cost + cities[ind][visited[0]]
 
     if cost < leastcost:
         route = visited.copy()
         leastcost = cost
 
-
-routeprint()
-print("Total cost: ",leastcost)
 print("\nCity matrix:\n")
 cityprint()
+if(route):
+    routeprint()
+    print("Total cost: ",leastcost)
+else:
+    print("\nNo Hamiltonian Circuit\n")
